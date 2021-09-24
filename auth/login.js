@@ -14,3 +14,13 @@ exports.alreadyLogin = (req, res, next) => {
         next()
     }
 }
+
+exports.isAuthenticated = (req, res, next) => {
+    try {
+        req.id = jwt.verify(req.cookies.jwtToken, process.env.JWT_SECERT)
+        next()
+    }
+    catch {
+        return res.redirect('/login')
+    }
+}

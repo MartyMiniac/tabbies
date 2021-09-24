@@ -1,9 +1,9 @@
 const router = require('express').Router()
 const fs = require('fs')
 const {getHTMLFile} = require('../../utilities/fileOps')
-const {alreadyLogin} = require('../../auth/login')
+const {alreadyLogin, isAuthenticated} = require('../../auth/login')
 
-router.get('/', (req, res) => {
+router.get('/', isAuthenticated, (req, res) => {
     res.sendFile(getHTMLFile('index.html'))
 })
 

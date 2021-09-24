@@ -20,7 +20,10 @@ const userSchema = mongoose.Schema({
     joiningDate : {
         type: Date,
         required: true
-    }
+    },
+    posts: [{
+        type: mongoose.Schema.Types.ObjectId
+    }]
 })
 
 const user = mongoose.model('user', userSchema)

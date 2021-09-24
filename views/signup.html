@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>    
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/logo.jpg">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/static/httpReq.js"></script>
+    <title>Tabbies</title>
+</head>
+<style>
+    html, body {
+        height: 100%;
+    }
+
+    body {
+        background-image: url("/static/background-small.jpg");
+        background-repeat: repeat;
+    }
+    .signup-box {
+        background-color: white;
+        border: 1px solid black;
+        padding: 2em;
+    }
+    .center-content {
+        margin: auto;
+        max-width: fit-content;
+    }
+    .signup-form {
+        padding: 2em 0em;
+    }
+</style>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 signup-box">
+                <h2 class="center-content">Sign up</h2>
+                <form class="signup-form" method="POST" action="/api/join/signup">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input required type="text" class="form-control" name="name" id="name" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input required type="text" class="form-control" name="username" id="username" placeholder="Enter username">
+                        <small id="usenameHelp" style="color: #6c757d;" class="form-text">Your username must be unique</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input required type="email" class="form-control" name="email" id="email" placeholder="Enter email">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input required type="password" class="form-control" name="password" id="password" placeholder="Password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign up</button>
+                </form>            
+            </div>
+        </div>
+    </div>
+</body>
+<script>    
+    document.getElementById('username').addEventListener('change', () => {
+        const usernameField = document.getElementById('username')
+        const unUnder = document.getElementById('usenameHelp')
+        sendPostReq('/api/join/checkUsernameAvailable', {
+            username: usernameField.value
+        }).then(data => {
+            data=JSON.parse(data)
+            if(data.success) {
+                unUnder.setAttribute('style', 'color: green;')
+                unUnder.innerText='username available'
+            }
+            else {
+                unUnder.setAttribute('style', 'color: red;')
+                unUnder.innerText='username unavailable'
+            }
+        })
+    })
+</script>
+</html>

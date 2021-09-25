@@ -15,6 +15,9 @@ const postSchema = mongoose.Schema({
     },
     owner: {
         type: String
+    },
+    interest: {
+        type: String
     }
 })
 

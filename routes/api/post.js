@@ -36,4 +36,15 @@ router.post('/getPosts', isAuthenticated, (req, res) => {
     })
 })
 
+router.post('/getPostByInterest', isAuthenticated, (req, res) => {
+    postOps.getPostByHobby(req.body.interest)
+    .then(arr => {
+        return res.json(arr)
+    })
+    .catch(err => {
+        console.log(err)
+        return res.sendStatus(500)
+    })
+})
+
 module.exports = router

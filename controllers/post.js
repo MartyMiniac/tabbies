@@ -21,7 +21,9 @@ exports.createPost = (file, data, uid) => {
                        posts: pst._id
                    }
                })
-               .then(() => {
+               .then(usr => {
+                   p.interest=usr.interest
+                   p.save()
                    resolve()
                })
                .catch(err => {
@@ -65,6 +67,20 @@ exports.getPostsFromArray = arr => {
         })
         .catch(err => {
             refuse(err)
+        })
+    })
+}
+
+exports.getPostByHobby = interest => {
+    return new Promise((resolve, refuse) => {
+        post.find({
+            interest: interest
+        }).limit(20)
+        .then(arr => {
+            resolve(arr)
+        })
+        .catch(err => {
+            refuse(Err)
         })
     })
 }

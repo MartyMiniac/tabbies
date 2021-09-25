@@ -25,7 +25,7 @@
         padding: 0.5em 1em;
         height: fit-content;
         width: 100%;
-        background-color: #dadada;
+        background-color: #ffffff;
     }
     .readPost {
         margin: 2em 0em;
@@ -54,6 +54,9 @@
         margin: 0.5em 0em;
         resize: none;
     }
+    #profileUsername {
+        color: #686868;
+    }
 </style>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -64,18 +67,18 @@
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/explore">Explore</a>
+                <a class="nav-link active" href="/explore">Explore</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="nameOfUser" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Dropdown
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" id="myProfileLink" href="/">Your Profile</a>
+                <a class="dropdown-item" id="myProfileLink" href="/">Your Profile</a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/api/user/signOut">Sign Out</a>
                 </div>
@@ -89,16 +92,10 @@
             </form>
         </div>
     </nav>
-    <div class="container feeds">
+    <div class="container feeds">        
         <div class="writePost">
-            <div class="form-outline text-right">
-                <form action="/api/post/createPost" method="POST" enctype="multipart/form-data">
-                    <textarea class="form-control" id="postInput" rows="4" name="body" placeholder="Have something in mind?"></textarea>
-                    <input type="file" id="uploadFile" name="file" class="btn btn-primary" style="width: 100%;">
-                    <input type="text" id="uploadFileType" name="contentType" value="image" hidden>
-                    <button class="btn btn-success" id="post-btn" type="submit">Post</button>
-                </form>
-            </div>
+            <h2 id="profileName"></h2>
+            <h6 id="profileUsername"></h6>
         </div>
         <div class="readPost" id="readposts">
         </div>
@@ -107,9 +104,21 @@
 <script>
     var userInfoAvailable=false
     var userInfo
-    var extensions = {
-        image: ['png', 'tiff', 'gif', 'jpeg', 'jpg'],
-        av: ['mp4', 'mkv', 'ogg', 'm4a', 'mp3', 'wav']
+    var interestTypes = {
+        coding: "coding",
+        dancing: "dancing",
+        drawing: "drawing",
+        painting: "painting",
+        drum: "playing drum",
+        guitar: "playing guitar",
+        keyboard: "playing keyboard",
+        piano: "playing piano",
+        sitar: "playing sitar",
+        tabla: "playing tabla",
+        violin: "Playing violin",
+        reading: "reading",
+        singing: "singing",
+        writing: "writing"
     }
     $(document).ready(() => {
         $.getJSON('/api/user/getUserInfo', (data, status) => {
@@ -120,24 +129,6 @@
                 userInfoAvailable=true
             }
         })
-        setTimeout(() => {
-            $.getJSON('/api/post/getPosts', (data, status) => {
-                data.forEach(element => {
-                    document.getElementById('readposts').innerHTML=document.getElementById('readposts').innerHTML+`
-                    <div class="card singlePost" style="width: 100%;">
-                    <h3 class="card-title" style="margin: 0.5em 2em;">
-                        <a href="/user/${element.owner}">
-                            ${element.owner}
-                        </a>
-                    </h3>
-                    `+getMedia(element.contentType, element.link)+`
-                    <div class="card-body">
-                        <p class="card-text">${element.body}</p>
-                    </div>
-                    </div>`
-                });
-            })
-        }, 2000)
         let userSearchTimer
         $('#userSearch').keyup(() => {
             clearTimeout(userSearchTimer)
@@ -156,6 +147,10 @@
                 })
             }, 1000)
         })
+
+        let interest = window.location.href.split('/')
+        interest=interest[interest.length-1]
+        renderProfile(interest)
     })
     const capName = name => {
         name=name.trim()
@@ -179,17 +174,32 @@
             return ''
         }
     }
-    document.getElementById('uploadFile').addEventListener('change', () =>{
-        const arr = document.getElementById('uploadFile').value.split('.')
-        const ext = arr[arr.length-1].toLowerCase()
-        if(extensions.image.find(e => e==ext)!=undefined) {
-            console.log('image', ext)
-            document.getElementById('uploadFileType').value='image'
-        }
-        else if(extensions.av.find(e => e==ext)!=undefined) {
-            console.log('av', ext)
-            document.getElementById('uploadFileType').value='av'
-        }
-    })
+    const renderProfile = interest => {
+        document.getElementById('profileName').innerText=capName(interestTypes[interest])
+        document.getElementById('profileUsername').innerText=`Showing posts related to ${interestTypes[interest]}`
+        showPosts(interest)
+    }
+    const showPosts = interest => {
+        sendPostReq('/api/post/getPostByInterest', {
+            interest: interest
+        })
+        .then(arr => {
+            arr=JSON.parse(arr)
+            arr.forEach(element => {
+                document.getElementById('readposts').innerHTML=document.getElementById('readposts').innerHTML+`
+                <div class="card singlePost" style="width: 100%;">
+                <h3 class="card-title" style="margin: 0.5em 2em;">
+                    <a href="/user/${element.owner}">
+                        ${element.owner}
+                    </a>
+                </h3>
+                `+getMedia(element.contentType, element.link)+`
+                <div class="card-body">
+                    <p class="card-text">${element.body}</p>
+                </div>
+                </div>`
+            });
+        })
+    }
 </script>
 </html>

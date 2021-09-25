@@ -23,4 +23,12 @@ router.get('/user/:id', isAuthenticated, (req, res) => {
     res.sendFile(getHTMLFile('userProfile.html'))
 })
 
+router.get('/explore', isAuthenticated, (req, res) => {
+    res.sendFile(getHTMLFile('explore.html'))
+})
+
+router.get('/explore/:interest', isAuthenticated, (req, res) => {
+    res.sendFile(getHTMLFile('exploreHobby.html'))
+})
+
 module.exports = router

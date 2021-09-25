@@ -9,6 +9,7 @@ exports.signup = data => {
             _id: data.username.toLowerCase(),
             email: data.email.toLowerCase(),
             password: data.password,
+            interest: data.interest,
             joiningDate: new Date()
         })
         u.save()

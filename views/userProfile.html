@@ -67,11 +67,11 @@
       
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="/explore">Explore</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" id="nameOfUser" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -96,6 +96,12 @@
         <div class="writePost">
             <h2 id="profileName"></h2>
             <h4 id="profileUsername"></h4>
+            <a id="profileEmail" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-fill" viewBox="0 0 16 16">
+                    <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                </svg>
+                Send Email
+            </a>
         </div>
         <div class="readPost" id="readposts">
         </div>
@@ -165,7 +171,8 @@
         .then(data => {
             data=JSON.parse(data)
             document.getElementById('profileName').innerText=capName(data.name)
-            document.getElementById('profileUsername').innerText='@'+data._id
+            document.getElementById('profileUsername').innerText=`@${data._id} (${data.interest})`
+            document.getElementById('profileEmail').setAttribute('href', `mailto: ${data.email}`)
             showPosts(data.posts)
         })
     }
@@ -178,7 +185,11 @@
             arr.forEach(element => {
                 document.getElementById('readposts').innerHTML=document.getElementById('readposts').innerHTML+`
                 <div class="card singlePost" style="width: 100%;">
-                <h3 class="card-title" style="margin: 0.5em 2em;">${element.owner}</h3>
+                <h3 class="card-title" style="margin: 0.5em 2em;">
+                    <a href="/user/${element.owner}">
+                        ${element.owner}
+                    </a>
+                </h3>
                 `+getMedia(element.contentType, element.link)+`
                 <div class="card-body">
                     <p class="card-text">${element.body}</p>

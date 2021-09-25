@@ -27,6 +27,7 @@ router.post('/signup', (req, res) => {
             message: 'PARAMETER ERROR : required name, email, password and username'
         })
     }
+    console.log(req.body)
     joinOps.signup(req.body)
     .then(() => {
         res.redirect('/login')

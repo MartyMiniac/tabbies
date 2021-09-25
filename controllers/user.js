@@ -46,7 +46,7 @@ exports.searchUser = (text) => {
 
 exports.getUserProfile = (uid) => {
     return new Promise((resolve, refuse) => {
-        user.findById(uid).select(['_id', 'name', 'email', 'posts'])
+        user.findById(uid).select(['_id', 'name', 'email', 'posts', 'interest'])
         .then(usr => {
             if(usr==null) {
                 resolve({

@@ -17,6 +17,10 @@ const userSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    interest: {
+        type: String,
+        required: true
+    },
     joiningDate : {
         type: Date,
         required: true

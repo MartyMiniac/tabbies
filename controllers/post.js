@@ -52,3 +52,19 @@ exports.getPosts = () => {
         })
     })
 }
+
+exports.getPostsFromArray = arr => {
+    return new Promise((resolve, refuse) => {
+        post.find({
+            _id: {
+                $in: arr
+            }
+        })
+        .then(data => {
+            resolve(data)
+        })
+        .catch(err => {
+            refuse(err)
+        })
+    })
+}

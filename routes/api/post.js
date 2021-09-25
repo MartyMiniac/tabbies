@@ -25,4 +25,15 @@ router.get('/getPosts', isAuthenticated, (req, res) => {
     })
 })
 
+router.post('/getPosts', isAuthenticated, (req, res) => {
+    postOps.getPostsFromArray(req.body.posts)
+    .then(data => {
+        return res.json(data)
+    })
+    .catch(err => {
+        console.log(err)
+        return res.sendStatus(500)
+    })
+})
+
 module.exports = router

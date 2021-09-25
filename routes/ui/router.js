@@ -19,4 +19,8 @@ router.get('/signup', alreadyLogin, (req, res) => {
     res.sendFile(getHTMLFile('signup.html'))
 })
 
+router.get('/user/:id', isAuthenticated, (req, res) => {
+    res.sendFile(getHTMLFile('userProfile.html'))
+})
+
 module.exports = router

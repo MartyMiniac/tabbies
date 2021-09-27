@@ -1,0 +1,14 @@
+# name of author
+name: Rohan Verma
+# college registeration number
+regdno: 1941012661
+# github username
+github: MartyMiniac
+# set number (1/2/3)
+set: 3
+# problem statement number (1/2/3/4)
+question: 1
+# description of the project
+description: The project is hosted on heroku paas and the link is https://tabbies.herokuapp.com/ . The Frontend part of the project is made using html, css and javascript using bootstrap framework and jquery library. The backend part of the project is made using node js. The express library is used as webserver provider for nodejs. The mongodb is used as the database of choice using mongoose connector and for static file storage firebase storage has been used.
+# credits of project
+credits: Google, Github, Bootstrap, JQuery, ExpressJS, Mongoose, Firebase-sdk, Multer, Jsonwebtoken
